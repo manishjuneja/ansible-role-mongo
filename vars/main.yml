@@ -1,0 +1,3 @@
+---
+# vars file for ansible-role-mongo36
+mongodb_gpg_key: "{{ 'https://www.mongodb.org/static/pgp/server-3.6.asc' }}"

@@ -1,0 +1,37 @@
+---
+- name: Adding MongoDB-3.6 Repository
+  yum_repository:
+       name: mongodb-org-3.6
+       description: MongoDB Repository
+       file: mongodb
+       baseurl: https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.6/x86_64/
+       gpgkey: https://www.mongodb.org/static/pgp/server-3.6.asc
+       gpgcheck: yes
+       enabled: yes
+
+- name: Installing MongoDB-3.6
+  yum:
+       name: "mongodb-org"
+       state: present
+
+- name: Install pymongo
+  pip:
+       name: pymongo==3.5.1
+       state: present
+
+- name: inject kernel.mm.transparent_hugepage
+  shell: |
+      echo "never" >> /sys/kernel/mm/transparent_hugepage/enabled
+      cat /sys/kernel/mm/transparent_hugepage/enabled
+
+- name: inject kernel.mm.transparent_hugepage_defrag
+  shell: |
+      echo "never" >> /sys/kernel/mm/transparent_hugepage/defrag
+      cat /sys/kernel/mm/transparent_hugepage/enabled
+
+- name: Starting Mongodb service
+  service:
+      name: mongod
+      state: restarted
+      enabled: yes
+  become: yes
